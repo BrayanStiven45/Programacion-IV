@@ -12,6 +12,7 @@
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 class ProyectoFinal{
     // Creacion de las varibles globales
@@ -81,6 +82,70 @@ class ProyectoFinal{
         return contraseña;
     }
 
+    // Metodo que solicita el tipo de identificacion al usuario 
+    public static String pedirTipoIdentificacion(){
+        String tipoIdentificacion = new String();
+        int opcion;
+        boolean validacion = true;
+        while(validacion){
+            System.out.println("____________________________________");
+            System.out.println("Tipo de identificación:\n ");
+            System.out.println("1. Cédula de ciudadanía");
+            System.out.println("2. Tarjeta de identidad");
+            System.out.println("3. Cédula de extranjería");
+            System.out.println("4. Pasaporte");
+            System.out.print("Opción: ");
+            opcion = leerDatoTeclado.nextInt();
+            leerDatoTeclado.nextLine();
+            switch (opcion) {
+                case 1:
+                    tipoIdentificacion = "Cédula de ciudadanía";
+                    validacion = false;
+                    break;
+                case 2:
+                    tipoIdentificacion = "Tarjeta de identidad";
+                    validacion = false;
+                    break;
+                case 3:
+                    tipoIdentificacion = "Cédula de extranjería";
+                    validacion = false;
+                    break;
+                case 4:
+                    tipoIdentificacion = "Pasaporte";
+                    validacion = false;
+                    break;
+                default:
+                    System.out.println("Ingrese una una opción valida");
+                    break;
+            }
+        }
+        return tipoIdentificacion;
+    }
+
+    /* Metodo que valida que los valores ingresados por el usuario sean numericos, mayores a 0 y no sean negativos
+    Recibe dos parametros, el mensaje que se le muestra al usuario y el mensaje de error
+    Retorna el valor ingresado por el usuario*/
+    public static String validarValoresNumericos(String mensaje, String mensajeError){
+        long valorNumerico = 0;
+        boolean validacion = true;
+        while(validacion){
+            System.out.println(mensaje);
+            try{
+                valorNumerico = leerDatoTeclado.nextLong();
+                leerDatoTeclado.nextLine();
+                if(valorNumerico > 0){
+                    validacion = false;
+                } else {
+                    System.out.println(mensajeError);
+                }
+            }catch(InputMismatchException e) {
+                System.out.println(mensajeError);
+                System.out.println("hola");
+                leerDatoTeclado.nextLine();
+            } 
+        }
+        return (valorNumerico + "");
+    }
     // Metodo que solicita los datos de registro al usuario y llama al metodo registrarUsuario
     public static void solicitarDatosDeRegistro(){
         System.out.println("____________________________________");
@@ -88,11 +153,11 @@ class ProyectoFinal{
         System.out.println("Para completar el registro, por favor facilitar la siguiente infomación: ");
         System.out.println("____________________________________");
 
-        System.out.println("Tipo de identificación: ");
-        String tipoIdentificacion = leerDatoTeclado.nextLine();
+        String tipoIdentificacion = pedirTipoIdentificacion();
 
-        System.out.println("Documento de identificación: ");
-        String documentoIdentificacion = leerDatoTeclado.nextLine();
+        String mensaje = "Documento de identificación sin puntos, ni comas: ";
+        String mensajeError = "Ingrese un número de documento valido.";
+        String documentoIdentificacion = validarValoresNumericos(mensaje, mensajeError);
 
         System.out.println("Nombres: ");
         String nombres = leerDatoTeclado.nextLine();
@@ -109,8 +174,9 @@ class ProyectoFinal{
         System.out.println("Ciudad de residencia: ");
         String ciudadResidencia = leerDatoTeclado.nextLine();
 
-        System.out.println("Teléfono de contacto: ");
-        String telefonoContacto = leerDatoTeclado.nextLine();
+        mensaje = "Teléfono de contacto: ";
+        mensajeError = "Ingrese un número de teléfono valido.";
+        String telefonoContacto = validarValoresNumericos(mensaje, mensajeError);
 
         String contraseña = solicitarContraseña();
 
@@ -204,6 +270,7 @@ class ProyectoFinal{
                     break;
                 case 3:
                     mostrarMenu = false;
+                    System.out.println("¡Hasta pronto!");
                     break;
                 default:
                     System.out.println("Ingrese una una opción valida");
